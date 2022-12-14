@@ -1,0 +1,40 @@
+  const accessUser = await createAccessUser({
+    name,
+    description,
+    code,
+    userId,
+  });
+
+Query: SELECT 1
+Params: []
+Query: SELECT "public"."User"."id", "public"."User"."email", "public"."User"."role", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE "public"."User"."id" = $1 LIMIT $2 OFFSET $3
+Params: ["cl9riv3dv0014ltthsctkqb0r",1,0]
+Query: BEGIN
+Params: []
+Query: SELECT "public"."User"."id" FROM "public"."User" WHERE "public"."User"."id" = $1 OFFSET $2
+Params: ["cl9riv3dv0014ltthsctkqb0r",0]
+Query: INSERT INTO "public"."AccessUser" ("name","description","code","userId","deletedAt") VALUES ($1,$2,$3,$4,$5) RETURNING "public"."AccessUser"."id"
+Params: ["New User","","777","cl9riv3dv0014ltthsctkqb0r",1970-01-01 00:00:00 UTC]
+Query: SELECT "public"."AccessUser"."id", "public"."AccessUser"."name", "public"."AccessUser"."description", "public"."AccessUser"."code", "public"."AccessUser"."activateCodeAt", "public"."AccessUser"."expireCodeAt", "public"."AccessUser"."userId", "public"."AccessUser"."deletedAt" FROM "public"."AccessUser" WHERE "public"."AccessUser"."id" = $1 LIMIT $2 OFFSET $3
+Params: [11,1,0]
+Query: COMMIT
+Params: []
+POST /access/users/create?_data=routes%2Faccess%2Fusers%2Fcreate 204 - - 131.941 
+
+export function getAccessUsers({ userId }: { userId: User["id"] }) {
+  return prisma.accessUser.findMany({
+    where: { deletedAt: new Date(0), user: { id: userId } },
+    orderBy: { name: "asc" },
+  });
+}
+
+GET /access/users/11?_data=root 200 - - 119.823 ms
+Query: SELECT "public"."User"."id", "public"."User"."email", "public"."User"."role", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE "public"."User"."id" = $1 LIMIT $2 OFFSET $3
+Params: ["cl9riv3dv0014ltthsctkqb0r",1,0]
+Query: SELECT "public"."User"."id", "public"."User"."email", "public"."User"."role", "public"."User"."createdAt", "public"."User"."updatedAt" FROM "public"."User" WHERE "public"."User"."id" = $1 LIMIT $2 OFFSET $3
+Params: ["cl9riv3dv0014ltthsctkqb0r",1,0]
+Query: SELECT "public"."AccessUser"."id", "public"."AccessUser"."name", "public"."AccessUser"."description", "public"."AccessUser"."code", "public"."AccessUser"."activateCodeAt", "public"."AccessUser"."expireCodeAt", "public"."AccessUser"."userId", "public"."AccessUser"."deletedAt" FROM "public"."AccessUser" WHERE ("public"."AccessUser"."id" = $1 AND "public"."AccessUser"."deletedAt" = $2 AND ("public"."AccessUser"."id") IN (SELECT "t0"."id" FROM "public"."AccessUser" AS "t0" INNER JOIN "public"."User" AS "j0" ON ("j0"."id") = ("t0"."userId") WHERE ("j0"."id" = $3 AND "t0"."id" IS NOT NULL))) LIMIT $4 OFFSET $5
+Params: [11,1970-01-01 00:00:00 UTC,"cl9riv3dv0014ltthsctkqb0r",1,0]
+Query: SELECT "public"."_AccessPointToAccessUser"."B", "public"."_AccessPointToAccessUser"."A" FROM "public"."_AccessPointToAccessUser" WHERE "public"."_AccessPointToAccessUser"."B" IN ($1)
+Params: [11]
+GET /access/users/11?_data=routes%2Faccess%2Fusers%2F%24accessUserId%2Findex 200 - - 58.645 ms
