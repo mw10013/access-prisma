@@ -1,9 +1,10 @@
-# Access
+# Access Prisma
+
+This is the version of access that uses prisma. The newer version is access-remix and uses sql functions instead of prisma.
 
 ## Setup
 
 - node >= 14.17.x
-- git clone https://github.com/Scarab2022/access.git
 - .env file in root. See .env.example
 - npm install
 - npm run docker
